@@ -52,6 +52,14 @@ data:
   JOB_WORKER_URL: redis://redis:6379/0
 
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name:  token
+data:
+   SECRET_TOKEN:  asecuretokenwouldnormallygohere
+type: Opaque
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
