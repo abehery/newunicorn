@@ -41,7 +41,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: config_environment
+  name: drkiqenv
   labels:
     app: newunicorn
 data:
@@ -57,7 +57,7 @@ kind: Secret
 metadata:
   name:  token
 data:
-   SECRET_TOKEN:  asecuretokenwouldnormallygohere
+   SECRET_TOKEN: YXNlY3VyZXRva2Vud291bGRub3JtYWxseWdvaGVyZQo=
 type: Opaque
 ---
 kind: PersistentVolumeClaim
