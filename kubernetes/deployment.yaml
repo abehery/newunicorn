@@ -1,4 +1,28 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: drkiq-postgres
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "10Gi"
+
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: drkiq-redis
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "10Gi"
+--- 
+
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -13,11 +37,19 @@ spec:
       containers:
       - name: postgres
         image: postgres:9.4.5
+        volumeMounts:
+        - mountPath: /var/lib/redis/data
+          name: drkiq-redis-data
         env:
           - name: POSTGRES_USER
             value: drkiq
           - name: POSTGRES_PASSWORD
-            value: yourpassword        
+            value: yourpassword
+      volumes:
+        - name: drkiq-postgres-data
+          persistentVolumeClaim:
+            claimName: drkiq-postgres
+             
 ---
 
 apiVersion: extensions/v1beta1
@@ -34,3 +66,10 @@ spec:
       containers:
       - name: redis
         image: redis:3.0.5
+        volumeMounts:
+        - mountPath: /var/lib/redis/data
+          name: drkiq-redis-data
+      volumes:
+        - name: drkiq-redis-data
+          persistentVolumeClaim:
+            claimName: drkiq-redis
