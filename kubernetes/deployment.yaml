@@ -1,3 +1,31 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  postgres
+spec:
+  selector:
+    app: newunicorn
+    type: postgres
+  type:   ClusterIP 
+  ports:
+  - name:  db-port
+    port:  5432
+    targetPort:  5432
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  redis
+spec:
+  selector:
+    app: newunicorn
+    type: redis
+  type:   ClusterIP 
+  ports:
+  - name:  db-port
+    port:  6379
+    targetPort:  6379
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -33,13 +61,14 @@ spec:
     metadata:
       labels:
         app: newunicorn
+        type: postgres
     spec:
       containers:
       - name: postgres
         image: postgres:9.4.5
         volumeMounts:
         - mountPath: /var/lib/redis/data
-          name: drkiq-redis-data
+          name: drkiq-postgres-data
         env:
           - name: POSTGRES_USER
             value: drkiq
@@ -62,6 +91,7 @@ spec:
     metadata:
       labels:
         app: newunicorn
+        type: redis
     spec:
       containers:
       - name: redis
