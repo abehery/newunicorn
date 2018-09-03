@@ -38,6 +38,20 @@ spec:
       storage: "10Gi"
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config_environment
+  labels:
+    app: newunicorn
+data:
+  WORKER_PROCESSES: my-value
+  LISTEN_ON: 0.0.0.0:8000
+  DATABASE_URL: postgresql://drkiq:yourpassword@postgres:5432/drkiq?encoding=utf8&pool=5&timeout=5000
+  CACHE_URL: redis://redis:6379/0
+  JOB_WORKER_URL: redis://redis:6379/0
+
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
