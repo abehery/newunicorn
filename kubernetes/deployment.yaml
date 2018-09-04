@@ -59,7 +59,7 @@ metadata:
   labels:
     app: newunicorn
 data:
-  WORKER_PROCESSES: ""
+  WORKER_PROCESSES: "1"
   LISTEN_ON: 0.0.0.0:8000
   DATABASE_URL: postgresql://drkiq:yourpassword@postgres:5432/drkiq?encoding=utf8&pool=5&timeout=5000
   CACHE_URL: redis://redis:6379/0
@@ -106,7 +106,7 @@ spec:
         - mountPath: /var/lib/redis/data
           name: drkiq-postgres-data
         env:
-          - name: POSTGRES_USERkube
+          - name: POSTGRES_USER
             value: drkiq
           - name: POSTGRES_PASSWORD
             value: yourpassword
@@ -154,7 +154,7 @@ spec:
     spec:
       containers:
       - name: drkiq
-        image: aymanbehery/drkiq
+        image: aymanbehery/newunicorn:latest
         imagePullPolicy: Always
         env:
           - name:  SECRET_TOKEN
