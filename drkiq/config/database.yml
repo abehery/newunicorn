@@ -1,15 +1,13 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-#
-sidekiq_config = { url: ENV['JOB_WORKER_URL'] }
+---
 
-Sidekiq.configure_server do |config|
-  config.redis = sidekiq_config
-end
+development: &default
+  secret_key_base: <%= ENV['SECRET_TOKEN'] %>
 
-Sidekiq.configure_client do |config|
-  config.redis = sidekiq_config
-end
+test:
+  <<: *default
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
