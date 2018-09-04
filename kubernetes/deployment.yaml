@@ -39,7 +39,20 @@ spec:
   - name:  db-port
     port:  6379
     targetPort:  6379
+   
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: drkiq-redis
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "10Gi"
+      
+--- 
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -50,6 +63,8 @@ spec:
   resources:
     requests:
       storage: "10Gi"
+
+
 
 ---
 apiVersion: v1
@@ -74,17 +89,7 @@ data:
    SECRET_TOKEN: YXNlY3VyZXRva2Vud291bGRub3JtYWxseWdvaGVyZQo=
 type: Opaque
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: drkiq-redis
-spec:
-  accessModes:
-    - "ReadWriteOnce"
-  resources:
-    requests:
-      storage: "10Gi"
---- 
+
 
 
 apiVersion: extensions/v1beta1
