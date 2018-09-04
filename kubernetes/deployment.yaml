@@ -1,6 +1,20 @@
 kind: Service
 apiVersion: v1
 metadata:
+  name:  drkiq
+spec:
+  selector:
+    app: newunicorn
+    type: drkiq
+  type:  LoadBalancer 
+  ports:
+  - name:  app-port
+    port:  80
+    targetPort:  8000
+---
+kind: Service
+apiVersion: v1
+metadata:
   name:  postgres
 spec:
   selector:
