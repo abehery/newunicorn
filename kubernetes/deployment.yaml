@@ -125,3 +125,52 @@ spec:
         - name: drkiq-redis-data
           persistentVolumeClaim:
             claimName: drkiq-redis
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: drkiq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: newunicorn
+        type: drkiq
+    spec:
+      containers:
+      - name: drkiq
+        image: aymanbehery/drkiq
+      env:
+        - name:  SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name:  token
+              key:  SECRET_TOKEN
+        - name: WORKER_PROCESSES
+          valueFrom:
+            configMapKeyRef:
+              name: drkiqenv
+              key: WORKER_PROCESSES
+        - name: JOB_WORKER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: drkiqenv
+              key: JOB_WORKER_URL
+        - name: CACHE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: drkiqenv
+              key: CACHE_URL
+        - name: LISTEN_ON
+          valueFrom:
+            configMapKeyRef:
+              name: drkiqenv
+              key: LISTEN_ON
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: drkiqenv
+              key: DATABASE_URL
+              
+                
