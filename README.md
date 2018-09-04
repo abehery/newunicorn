@@ -323,3 +323,32 @@ spec:
                 name: drkiqenv
                 key: DATABASE_URL
 ```
+
+### **Run the deployment :** 
+```yaml
+kubectl apply -f kubernetes/deployment.yaml
+```
+> wait a while to complet the deployment and can run :
+```yaml
+kubectl get service drkiq
+```
+> and get the ip and port of service and access it 
+
+
+ 
+![Image](https://image.ibb.co/gDU4ue/Deepin_Screenshot_select_area_20180904235642.png)
+> the Application working now  
+
+### **Initialize the Database**
+
+Run the following commands to initialize the database:
+```bash
+kubectl exec (drkiq pod name ) rake db:reset
+kubectl exec (drkiq pod name) rake db:migrate
+```
+> use `kubectl get pod` , to get the (drkiq pod name ) 
+
+
+
+
+
