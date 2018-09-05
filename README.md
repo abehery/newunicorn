@@ -52,8 +52,8 @@ CMD bundle exec rake RAILS_ENV=production DATABASE_URL=postgresql://user:pass@12
 
 ### Build the docker image and tag it with your docker repository and push it 
 ```bash
-docker build -t <repository>/<image name>:<release>  && docker push <repository>/<image name>:<release>
-- docker build -t aymanbehery/newuincorn:latest && docker push aymanbehery/newuincorn:latest
+docker build -t <repository>/<image name>:<release> . && docker push <repository>/<image name>:<release>
+- docker build -t aymanbehery/newunicorn .  && docker push aymanbehery/newunicorn
 ```
 
 > Note : you have to be in your project directory before build the image 
@@ -342,11 +342,74 @@ kubectl get service drkiq
 ### **Initialize the Database**
 
 Run the following commands to initialize the database:
+
 ```bash
-kubectl exec (drkiq pod name ) rake db:reset
-kubectl exec (drkiq pod name) rake db:migrate
+kubectl exec <drkiq_pod_name> rake db:reset
+kubectl exec <drkiq_pod_name> rake db:migrate
 ```
 > use `kubectl get pod` , to get the (drkiq pod name ) 
+
+
+### **Working with the Rails Application**
+
+### Generating a Controller
+```bash
+docker run -it --rm --user "$(id -u):$(id -g)"   -v "$PWD":/usr/src/app -w /usr/src/app aymanbehery/newunicorn rails g controller Pages home
+```
+### 
+### Modify the Routes File
+Remove the get 'pages/home' line near the top and replace it with the following: 
+```bash
+root 'pages#home'
+```
+### 
+### Adding a New Job
+Use the following to add a new job:
+```bash
+docker run -it --rm --user "$(id -u):$(id -g)"   -v "$PWD":/usr/src/app -w /usr/src/app aymanbehery/newunicorn rails g job counter
+```
+
+### Modifying the Counter Job
+Next, replace the perform function to look like this:
+```ruby
+def perform(*args)
+  21 + 21
+end
+```
+
+### Modifying the Pages Controller
+Replace the home action to look like this:
+```ruby
+def home
+  # We are executing the job on the spot rather than in the background to
+  # exercise using Sidekiq in a trivial example.
+  #
+  # Consult with the Rails documentation to learn more about Active Job:
+  # http://edgeguides.rubyonrails.org/active_job_basics.html
+  @meaning_of_life = CounterJob.perform_now
+end
+```
+
+
+Modifying the Home View
+The next step is to replace the app/views/pages/home.html.erb file to look as follows:
+
+```ruby
+<h1>The meaning of life is <%= @meaning_of_life %></h1><h1>New %></h1>
+```
+
+
+> Build and push the docker image to add the changes 
+
+> Delete the running app pod(S) to update with new image 
+
+```ruby
+ kubectl delete pod  <drkiq_pod_name> 
+```
+
+> If you reload the website you should see the changes we made.
+
+
 
 
 
