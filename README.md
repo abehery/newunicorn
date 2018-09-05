@@ -170,6 +170,7 @@ type: Opaque
 - Add postgres and redis deployemnt :
 > Mount volumes to postgres and redis deployemn to make them A stateful apps  that store information about what has happened or changed since it started running without losing any data. 
 ```yaml
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -197,47 +198,9 @@ spec:
         - name: drkiq-postgres-data
           persistentVolumeClaim:
             claimName: drkiq-postgres
----                         
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: redis
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: newunicorn
-        type: redis
-    spec:
-      containers:apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: postgres
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: newunicorn
-        type: postgres
-    spec:
-      containers:
-      - name: postgres
-        image: postgres:9.4.5
-        volumeMounts:
-        - mountPath: /var/lib/redis/data
-          name: drkiq-postgres-data
-        env:
-          - name: POSTGRES_USER
-            value: drkiq
-          - name: POSTGRES_PASSWORD
-            value: yourpassword
-      volumes:
-        - name: drkiq-postgres-data
-          persistentVolumeClaim:
-            claimName: drkiq-postgres
----                         
+             
+---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -251,15 +214,6 @@ spec:
         type: redis
     spec:
       containers:
-      - name: redis
-        image: redis:3.0.5
-        volumeMounts:
-        - mountPath: /var/lib/redis/data
-          name: drkiq-redis-data
-      volumes:
-        - name: drkiq-redis-data
-          persistentVolumeClaim:
-            claimName: drkiq-redis
       - name: redis
         image: redis:3.0.5
         volumeMounts:
@@ -353,6 +307,7 @@ kubectl exec <drkiq_pod_name> rake db:migrate
 ### **Working with the Rails Application**
 
 ### Generating a Controller
+Use the same image you have build. 
 ```bash
 docker run -it --rm --user "$(id -u):$(id -g)"   -v "$PWD":/usr/src/app -w /usr/src/app aymanbehery/newunicorn rails g controller Pages home
 ```
@@ -391,11 +346,12 @@ end
 ```
 
 
-Modifying the Home View
+### Modifying the Home View
 The next step is to replace the app/views/pages/home.html.erb file to look as follows:
 
 ```ruby
-<h1>The meaning of life is <%= @meaning_of_life %></h1><h1>New %></h1>
+<h1>The meaning of life is <%= @meaning_of_life %></h1>
+<h1>New Unicorn --></h1>
 ```
 
 
