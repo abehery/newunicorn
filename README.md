@@ -411,6 +411,9 @@ The next step is to replace the app/views/pages/home.html.erb file to look as fo
 
 
 
+![Image](https://image.ibb.co/bWgLKe/Deepin_Screenshot_select_area_20180905015546.png)
+
+
 
 
 
