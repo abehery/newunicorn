@@ -24,4 +24,4 @@ COPY . .
 VOLUME ["$INSTALL_PATH/public"]
 
 
-CMD bundle exec rake RAILS_ENV=production DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname SECRET_TOKEN=pickasecuretoken assets:precompile & bundle exec unicorn -c config/unicorn.rb & bundle exec sidekiq -C config/sidekiq.yml
+CMD bundle exec rake RAILS_ENV=production DATABASE_URL=postgresql://user:pass@postgresql/dbname SECRET_TOKEN=pickasecuretoken assets:precompile & bundle exec unicorn -c config/unicorn.rb & bundle exec sidekiq -C config/sidekiq.yml
